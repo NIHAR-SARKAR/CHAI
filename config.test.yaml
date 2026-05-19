@@ -1,0 +1,152 @@
+# PICO CLAW MCP Security Server — Main Configuration
+# Secrets (API keys, tokens) go in .security.yml — NEVER here
+
+server:
+  name: "pico-claw-mcp-security"
+  version: "2.0.0"
+  transport: "stdio"           # stdio | sse
+  sse_port: 8765               # only used if transport=sse
+  log_level: "info"            # debug | info | warn | error
+
+paths:
+  kb_path: "/opt/kb"
+  session_db: "/opt/sessions/sessions.db"
+  sandbox_user: "pentester"
+  firejail_profile: "/etc/firejail/pentest.profile"
+  audit_log_path: "/opt/logs/audit.log"
+  reports_path: "/opt/sessions/reports"
+  plugins_path: "/opt/mcp-security-server/plugins/external"  # drop plugins here
+
+sandbox:
+  max_ram_mb: 384
+  max_cpu_percent: 50
+  max_concurrent_jobs: 2
+  command_timeout: 300
+
+# ─────────────────────────────────────────────────────────────
+# LLM PROVIDER CONFIGURATION
+# The server has its OWN AI brain — independent of PICO CLAW.
+# Enable ONE primary provider. Fallback is optional.
+# All api_key values must be set in .security.yml
+# ─────────────────────────────────────────────────────────────
+llm:
+  enabled: true
+  # Which provider to use by default for autonomous decisions
+  # Options: azure_openai | openai | anthropic | amazon_bedrock | openrouter | huggingface
+  active_provider: "azure_openai"
+
+  # Optional: fallback provider if primary fails (429, timeout, error)
+  fallback_provider: "openrouter"
+
+  # Shared limits applied to all providers
+  max_tokens: 1000
+  temperature: 0.1          # Low = deterministic decisions (good for security)
+  timeout_seconds: 30
+  max_retries: 2
+
+  # ── PROVIDER 1: Azure OpenAI ──────────────────────────────
+  azure_openai:
+    enabled: true
+    endpoint: ""              # e.g. https://my-resource.openai.azure.com/
+    api_version: "2025-01-01-preview"
+    # Deployments — you can define multiple and switch by name
+    deployments:
+      gpt4_1:
+        deployment_name: "gpt-4-1"       # your Azure deployment name
+        model: "gpt-4.1"
+        enabled: true
+      gpt4o:
+        deployment_name: "gpt-4o"
+        model: "gpt-4o"
+        enabled: true
+      gpt5:
+        deployment_name: "gpt-5"
+        model: "gpt-5"
+        enabled: false                   # flip to true when available
+      kimi_azure:
+        deployment_name: "kimi-k2"
+        model: "kimi-k2"
+        enabled: false                   # Kimi via Azure AI Foundry
+      deepseek_azure:
+        deployment_name: "deepseek-v3"
+        model: "deepseek-v3"
+        enabled: false                   # DeepSeek via Azure AI Foundry
+    # Which deployment to use for AI decisions
+    active_deployment: "gpt4_1"
+    # api_key: set in .security.yml as azure_openai.api_key
+
+  # ── PROVIDER 2: Direct OpenAI ────────────────────────────
+  openai:
+    enabled: true
+    api_base: "https://api.openai.com/v1"
+    model: "gpt-4.1"
+    # api_key: set in .security.yml as openai.api_key
+
+  # ── PROVIDER 3: Anthropic Claude ─────────────────────────
+  anthropic:
+    enabled: true
+    api_base: "https://api.anthropic.com/v1"
+    model: "claude-sonnet-4-5"           # or claude-opus-4-5
+    # api_key: set in .security.yml as anthropic.api_key
+
+  # ── PROVIDER 4: Amazon Bedrock ───────────────────────────
+  amazon_bedrock:
+    enabled: true
+    region: "us-east-1"
+    model_id: "anthropic.claude-sonnet-4-5-v1:0"
+    # Supports: anthropic.claude-*, amazon.titan-*, meta.llama-*
+    # Credentials: set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY in .security.yml
+    # or use IAM role (no keys needed if running on EC2/ECS with role attached)
+    use_iam_role: false
+
+  # ── PROVIDER 5: OpenRouter ───────────────────────────────
+  openrouter:
+    enabled: true
+    api_base: "https://openrouter.ai/api/v1"
+    model: "anthropic/claude-sonnet-4-5"
+    # Supports 100+ models with one key. Great fallback option.
+    # Format: "provider/model" e.g.:
+    #   openai/gpt-4.1
+    #   anthropic/claude-sonnet-4-5
+    #   deepseek/deepseek-chat
+    #   mistralai/mistral-large
+    #   google/gemini-2.5-pro
+    # api_key: set in .security.yml as openrouter.api_key
+
+  # ── PROVIDER 6: HuggingFace Inference API ────────────────
+  huggingface:
+    enabled: true
+    api_base: "https://router.huggingface.co/v1"
+    model: "deepseek-ai/DeepSeek-V3"
+    # HF routes to best available inference provider automatically
+    # Other good models: Qwen/Qwen3-72B, meta-llama/Llama-3.3-70B-Instruct
+    # api_key: set in .security.yml as huggingface.api_key (HF_TOKEN)
+
+# ─────────────────────────────────────────────────────────────
+# AI PLANNER BEHAVIOUR
+# Controls how the planner uses LLM calls
+# ─────────────────────────────────────────────────────────────
+ai_planner:
+  max_phases: 4
+  stop_on_critical: true
+  # Max tokens sent TO the LLM per call (keep compact)
+  max_digest_tokens: 500
+  # Use graph_db to pre-filter options before calling LLM
+  # (reduces tokens, grounds decisions in KB)
+  use_graph_prefilter: true
+  # Include AI-generated narrative in reports
+  include_ai_narrative: true
+
+# ─────────────────────────────────────────────────────────────
+# PLUGIN SYSTEM
+# ─────────────────────────────────────────────────────────────
+plugins:
+  enabled: true
+  # Bundled plugins (always available)
+  bundled:
+    feroxbuster: true
+    metasploit: false       # disabled by default (Tier 3 risk)
+    burp_api: false         # needs Burp Pro API key
+  # External plugin discovery
+  # Drop any PentestPlugin subclass into plugins_path and it auto-loads
+  auto_discover: true

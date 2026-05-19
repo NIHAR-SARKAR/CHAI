@@ -1,0 +1,27 @@
+# PICO CLAW MCP Security Server — Secrets File
+# NEVER commit this file. Add to .gitignore.
+# File permissions should be 600 (chmod 600 .security.yml)
+
+azure_openai:
+  api_key: ""                # paste your Azure OpenAI key here
+
+openai:
+  api_key: ""                # paste your OpenAI key here
+
+anthropic:
+  api_key: ""                # paste your Anthropic key here
+
+amazon_bedrock:
+  aws_access_key_id: ""      # leave blank if using IAM role
+  aws_secret_access_key: ""  # leave blank if using IAM role
+
+openrouter:
+  api_key: ""                # paste your OpenRouter key here
+
+huggingface:
+  api_key: ""                # paste your HuggingFace token here
+
+# Optional: Burp Suite Pro API (for burp_api plugin)
+burp_api:
+  api_key: ""
+  api_base: "http://localhost:1337"
