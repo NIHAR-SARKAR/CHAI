@@ -226,7 +226,7 @@ Add to your CHAI `config.json`:
   "tools": {
     "mcp": {
       "servers": {
-        "pico-claw-security": {
+        "CHAI-security": {
           "transport": "stdio",
           "command": "python",
           "args": ["-m", "mcp_security_server.main"],
@@ -248,7 +248,7 @@ Add to your CHAI `config.json`:
   "tools": {
     "mcp": {
       "servers": {
-        "pico-claw-security": {
+        "CHAI-security": {
           "transport": "sse",
           "url": "http://raspberrypi.local:8765/sse"
         }
@@ -424,5 +424,5 @@ MIT License — See LICENSE file for details.
 ## Support
 
 For issues and questions:
-- GitHub Issues: [github.com/pico-claw/mcp-security-server](https://github.com/pico-claw/mcp-security-server)
-- Documentation: [docs.pico-claw.dev](https://docs.pico-claw.dev)
+- GitHub Issues: [https://github.com/NIHAR-SARKAR/CHAI](https://github.com/NIHAR-SARKAR/CHAI)
+- Documentation: [https://aithread.in](https://aithread.in)
