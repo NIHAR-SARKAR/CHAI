@@ -1,0 +1,43 @@
+# Core MCP
+mcp>=1.0.0
+fastmcp>=0.4.0
+
+# Config + Validation
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+pyyaml>=6.0.0
+
+# Database
+aiosqlite>=0.19.0
+sqlite-vec>=0.1.0
+
+# KB + Embeddings
+sentence-transformers>=2.2.0
+jinja2>=3.1.0
+
+# ── LLM PROVIDER SDKs ────────────────────────────────────────
+# Azure OpenAI + Direct OpenAI (same SDK)
+openai>=1.30.0
+
+# Anthropic Claude
+anthropic>=0.30.0
+
+# Amazon Bedrock (uses boto3)
+boto3>=1.34.0
+botocore>=1.34.0
+
+# OpenRouter and HuggingFace use OpenAI SDK (openai>=1.30.0 above)
+# No additional SDK needed — they're OpenAI-compatible
+
+# ── Security Tools ───────────────────────────────────────────
+pyjwt>=2.8.0
+requests>=2.31.0
+lxml>=4.9.0
+python-whois>=0.8.0
+
+# ── Utilities ────────────────────────────────────────────────
+python-dotenv>=1.0.0
+
+# Dev only (comment out in prod)
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
