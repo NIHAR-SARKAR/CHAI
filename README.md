@@ -81,7 +81,7 @@ External Client (CHAI / any MCP tool)
 ## Project Structure
 
 ```
-mcp_security_server/
+CHAI/
 ├── main.py                          # FastMCP server entry point
 ├── config.py                        # Configuration loader
 ├── config.yaml                      # Main configuration (no secrets)
@@ -165,7 +165,7 @@ mcp_security_server/
 ```bash
 # Clone the repository
 git clone https://github.com/NIHAR-SARKAR/CHAI.git
-cd mcp_security_server
+cd CHAI
 
 # Create virtual environment
 python -m venv .venv
@@ -266,7 +266,7 @@ Add to your CHAI `config.json`:
         "chai-security": {
           "transport": "stdio",
           "command": "python",
-          "args": ["-m", "mcp_security_server.main"],
+          "args": ["-m", "main.py"],
           "cwd": "/opt/mcp-security-server",
           "env": {
             "PYTHONPATH": "/opt/mcp-security-server"
