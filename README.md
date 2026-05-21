@@ -4,6 +4,10 @@ Cyber Host Artificial Intelligence (C.H.A.I)
 
 A production-ready, autonomous penetration testing MCP (Model Context Protocol) server with an integrated AI decision engine, multi-provider LLM support, and an extensible plugin architecture. Designed for Raspberry Pi 4/5 running Kali Linux ARM64.
 
+<p align="center">
+	
+<img src="./chai-banner.png" width="90%" />
+</p>
 ## Architecture Overview
 
 ```

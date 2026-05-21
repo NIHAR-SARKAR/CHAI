@@ -1,0 +1,66 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "CHAI Server (SSE)",
+      "type": "python",
+      "request": "launch",
+      "module": "main",
+      "args": [
+        "--transport",
+        "sse"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "PYTHONUNBUFFERED": "1",
+        "LOG_LEVEL": "DEBUG"
+      }
+    },
+    {
+      "name": "CHAI Server (streamable-http)",
+      "type": "python",
+      "request": "launch",
+      "module": "main",
+      "args": [
+        "--transport",
+        "streamable-http"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "PYTHONUNBUFFERED": "1",
+        "LOG_LEVEL": "DEBUG"
+      }
+    },
+    {
+      "name": "CHAI Server (stdio)",
+      "type": "python",
+      "request": "launch",
+      "module": "main",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "PYTHONUNBUFFERED": "1",
+        "LOG_LEVEL": "DEBUG"
+      }
+    },
+    {
+      "name": "CHAI with MCP Inspector",
+      "type": "python",
+      "request": "launch",
+      "module": "chai.main",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "PYTHONUNBUFFERED": "1",
+        "LOG_LEVEL": "DEBUG"
+      },
+      "preLaunchTask": "mcp-inspector"
+    }
+  ]
+}

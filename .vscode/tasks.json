@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "pip-install",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/pip",
+            "args": [
+                "install",
+                "-r",
+                "requirements.txt"
+            ],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "mcp-inspector",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@anthropics/mcp-inspector",
+                "--",
+                "${workspaceFolder}/.venv/bin/python",
+                "-m",
+                "chai.main"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "isBackground": true
+        }
+    ]
+}

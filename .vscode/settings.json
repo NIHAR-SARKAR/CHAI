@@ -1,0 +1,51 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.venv": true
+    },
+    "search.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true
+    },
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "mcp.servers": {
+        "chai-security-local": {
+            "type": "stdio",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "chai.main"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "PYTHONUNBUFFERED": "1"
+            }
+        }
+    }
+}
