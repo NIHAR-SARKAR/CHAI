@@ -16,14 +16,15 @@ class AzureOpenAIProvider(BaseLLMProvider):
         azure_cfg = config.llm.azure_openai
         secrets = config.secrets.azure_openai
         deployment = azure_cfg.deployments[azure_cfg.active_deployment]
-
+    
         self._client = AsyncAzureOpenAI(
             api_key=secrets.get("api_key", ""),
             azure_endpoint=azure_cfg.endpoint,
             api_version=azure_cfg.api_version,
         )
-        self._deployment_name = deployment.deployment_name
-        self._model = deployment.model
+        # Access as dict since deployments is a nested dict, not a dataclass
+        self._deployment_name = deployment["deployment_name"]
+        self._model = deployment["model"]
         self._max_retries = config.llm.max_retries
         self._timeout = config.llm.timeout_seconds
 

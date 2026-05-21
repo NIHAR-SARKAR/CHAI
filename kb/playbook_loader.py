@@ -18,8 +18,8 @@ SECTION_PATTERNS = {
 
 # Pattern to extract tool references
 TOOL_PATTERN = re.compile(
-    r"(?:run|use|execute|call)\s+["']?([a-zA-Z0-9_-]+)["']?|"
-    r"([a-zA-Z0-9_-]+)\s+(?:--[a-z-]+|-[a-z]+)",
+    r'(?:run|use|execute|call)\s+["\']?([a-zA-Z0-9_-]+)["\']?|'
+    r'([a-zA-Z0-9_-]+)\s+(?:--[a-z-]+|-[a-z]+)',
     re.IGNORECASE
 )
 

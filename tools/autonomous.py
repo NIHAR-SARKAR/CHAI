@@ -1,6 +1,6 @@
 """
 run_autonomous_scan — top-level MCP tool.
-External clients (PICO CLAW or any MCP client) call this ONCE
+External clients (CHAI or any MCP client) call this ONCE
 and get a complete pentest result back.
 The internal AI planner + execution loop handle everything.
 """

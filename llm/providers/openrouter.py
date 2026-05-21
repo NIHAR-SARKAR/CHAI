@@ -16,8 +16,8 @@ class OpenRouterProvider(BaseLLMProvider):
             api_key=config.secrets.openrouter.get("api_key", ""),
             base_url=config.llm.openrouter.api_base,
             default_headers={
-                "HTTP-Referer": "https://github.com/pico-claw/mcp-security-server",
-                "X-Title": "PICO CLAW MCP Security",
+                "HTTP-Referer": "https://github.com/chai/mcp-security-server",
+                "X-Title": "CHAI MCP Security",
             },
         )
         self._model = config.llm.openrouter.model

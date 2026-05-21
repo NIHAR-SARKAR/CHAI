@@ -1,4 +1,5 @@
 # CHAI
+
 Cyber Host Artificial Intelligence (C.H.A.I)
 
 A production-ready, autonomous penetration testing MCP (Model Context Protocol) server with an integrated AI decision engine, multi-provider LLM support, and an extensible plugin architecture. Designed for Raspberry Pi 4/5 running Kali Linux ARM64.
@@ -31,6 +32,7 @@ External Client (CHAI / any MCP tool)
 ```
 
 **Design Philosophy: THIN BRAIN, THICK LOOP**
+
 - The internal LLM fires only at **decision boundaries**, not per-step
 - A local `execution_loop` handles tool chaining deterministically between LLM calls
 - Keeps token usage low (~6-10 calls per full pentest) and latency acceptable on a Pi 4
@@ -38,6 +40,7 @@ External Client (CHAI / any MCP tool)
 ## Features
 
 ### Multi-Provider LLM Support
+
 - **Azure OpenAI** (GPT-4.1, GPT-4o, GPT-5+, Kimi, DeepSeek via Azure AI Foundry)
 - **Direct OpenAI** (GPT-4.1, GPT-4o, etc.)
 - **Anthropic Claude** (Sonnet, Opus)
@@ -46,11 +49,13 @@ External Client (CHAI / any MCP tool)
 - **HuggingFace** (DeepSeek, Qwen, Llama via Inference API)
 
 ### AI Decision Engine
+
 - **plan()**: Decides what to test next based on findings
 - **evaluate()**: Decides whether to continue or stop
 - **summarize_for_report()**: Generates executive summary and remediation priorities
 
 ### Security & Sandboxing
+
 - **firejail** profiles with rlimit restrictions
 - **Linux cgroups** for resource limiting
 - **Restricted user** (`pentester`) execution
@@ -58,11 +63,13 @@ External Client (CHAI / any MCP tool)
 - **Immutable audit logging** of all commands and AI decisions
 
 ### Plugin System
+
 - Auto-discovers plugins from `plugins/bundled/` and `plugins/external/`
 - Drop-in plugin architecture — no core changes needed
 - Bundled plugins: Feroxbuster, Metasploit, Burp Suite API
 
 ### Database
+
 - **SQLite ONLY** — no Neo4j, Redis, or Postgres required
 - WAL mode for better concurrency
 - Knowledge graph with 50+ attack techniques and recursive CTE chain queries
@@ -143,7 +150,8 @@ mcp_security_server/
 ## Installation
 
 ### Prerequisites
-- Raspberry Pi 4/5 with Kali Linux ARM64 (bare metal, NO Docker)
+
+- Any linux machine / Raspberry Pi 4/5 with Kali Linux ARM64 (bare metal, NO Docker)
 - Python 3.11+
 - firejail installed
 - Kali Linux pentest tools (nmap, sqlmap, nuclei, ffuf, etc.)
@@ -152,12 +160,13 @@ mcp_security_server/
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/NIHAR-SARKAR/CHAI.git
 cd mcp_security_server
 
 # Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate -- linux
+.venv\Scripts\activate    -- windows
 
 # Install dependencies
 pip install -r requirements.txt
@@ -168,40 +177,58 @@ chmod 600 .security.yml
 # Edit .security.yml with your API keys
 
 # Create required directories
+### linux
 sudo mkdir -p /opt/sessions /opt/logs /opt/kb /opt/mcp-security-server/plugins/external
 sudo chown -R $(whoami) /opt/sessions /opt/logs /opt/kb
 
+### windows PowerSheel
+New-Item -ItemType Directory -Force -Path "C:\opt\sessions"
+New-Item -ItemType Directory -Force -Path "C:\opt\logs"
+New-Item -ItemType Directory -Force -Path "C:\opt\kb"
+New-Item -ItemType Directory -Force -Path "C:\opt\mcp-security-server\plugins\external"
+
+icacls "C:\opt" /grant "$env:USERNAME:(OI)(CI)F" /Ts -- Grant current user full permissions
+
 # Install firejail profile
 sudo cp data/firejail/pentest.profile /etc/firejail/
+
+
+
+# run server
+python main.py --transport streamable-http
 ```
 
 ## Configuration
 
 ### config.yaml (Main Config)
+
 Edit `config.yaml` to configure:
+
 - Server transport (stdio or SSE)
 - Sandbox limits (RAM, CPU, timeout)
 - LLM provider selection
 - Plugin enable/disable
 
 Key sections:
+
 ```yaml
 llm:
-  active_provider: "azure_openai"  # Change to your preferred provider
-  fallback_provider: "openrouter"    # Optional fallback
+  active_provider: "azure_openai" # Change to your preferred provider
+  fallback_provider: "openrouter" # Optional fallback
 
 ai_planner:
-  max_phases: 4                    # Max autonomous phases
-  stop_on_critical: true           # Stop on critical findings
+  max_phases: 4 # Max autonomous phases
+  stop_on_critical: true # Stop on critical findings
 
 plugins:
   bundled:
     feroxbuster: true
-    metasploit: false              # Disabled by default (Tier 3)
-    burp_api: false                # Needs Burp Pro API key
+    metasploit: false # Disabled by default (Tier 3)
+    burp_api: false # Needs Burp Pro API key
 ```
 
 ### .security.yml (Secrets)
+
 ```yaml
 # NEVER commit this file
 azure_openai:
@@ -221,12 +248,13 @@ anthropic:
 Add to your CHAI `config.json`:
 
 **stdio transport:**
+
 ```json
 {
   "tools": {
     "mcp": {
       "servers": {
-        "CHAI-security": {
+        "chai-security": {
           "transport": "stdio",
           "command": "python",
           "args": ["-m", "mcp_security_server.main"],
@@ -243,14 +271,15 @@ Add to your CHAI `config.json`:
 ```
 
 **SSE transport (for remote Pi access):**
+
 ```json
 {
   "tools": {
     "mcp": {
       "servers": {
-        "CHAI-security": {
+        "chai-security": {
           "transport": "sse",
-          "url": "http://raspberrypi.local:8765/sse"
+          "url": "http://raspberrypi.local:9010/sse"
         }
       }
     }
@@ -261,6 +290,7 @@ Add to your CHAI `config.json`:
 ## Usage
 
 ### Initialize a Session
+
 ```python
 initialize_session(
     target="https://target.example.com",
@@ -271,6 +301,7 @@ initialize_session(
 ```
 
 ### Run Autonomous Scan (One Call, Complete Test)
+
 ```python
 run_autonomous_scan(
     session_id="sess-abc-123",
@@ -292,6 +323,7 @@ run_autonomous_scan(
 ```
 
 ### Manual Tool Calls
+
 ```python
 # Reconnaissance
 run_recon(session_id="sess-abc-123", target="target.example.com", recon_type="passive")
@@ -327,6 +359,7 @@ emergency_stop(session_id="sess-abc-123")
 ## Adding a New LLM Provider
 
 **Step 1** — Create `llm/providers/gemini.py`:
+
 ```python
 from llm.base_provider import BaseLLMProvider, LLMResponse
 
@@ -339,6 +372,7 @@ class GeminiProvider(BaseLLMProvider):
 ```
 
 **Step 2** — Add one `case` to `llm/provider_factory.py`:
+
 ```python
 case "gemini":
     from llm.providers.gemini import GeminiProvider
@@ -346,6 +380,7 @@ case "gemini":
 ```
 
 **Step 3** — Add config block to `config.yaml`:
+
 ```yaml
 llm:
   gemini:
@@ -355,6 +390,7 @@ llm:
 ```
 
 **Step 4** — Add key to `.security.yml`:
+
 ```yaml
 gemini:
   api_key: ""
@@ -367,6 +403,7 @@ gemini:
 ## Adding a New Pentest Plugin
 
 **Step 1** — Create `plugins/external/gospider_plugin.py`:
+
 ```python
 from plugins.plugin_base import PentestPlugin, PluginMetadata, PluginResult
 
@@ -391,6 +428,7 @@ class GospiderPlugin(PentestPlugin):
 ## LLM Call Budget
 
 For a 4-phase autonomous scan:
+
 - Phase 1: plan() + evaluate() = 2 calls
 - Phase 2: plan() + evaluate() = 2 calls
 - Phase 3: plan() + evaluate() = 2 calls
@@ -412,6 +450,7 @@ This keeps token usage low and latency acceptable on a Raspberry Pi 4.
 ## License
 
 MIT License — See LICENSE file for details.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## Contributing
 
@@ -424,5 +463,7 @@ MIT License — See LICENSE file for details.
 ## Support
 
 For issues and questions:
-- GitHub Issues: [https://github.com/NIHAR-SARKAR/CHAI](https://github.com/NIHAR-SARKAR/CHAI)
-- Documentation: [https://aithread.in](https://aithread.in)
+
+- GitHub Issues: [https://github.com/NIHAR-SARKAR/CHAI/issues](https://github.com/NIHAR-SARKAR/CHAI/issues)
+- Documentation: [https://github.com/NIHAR-SARKAR/CHAI/blob/main/README.md](https://github.com/NIHAR-SARKAR/CHAI/blob/main/README.md)
+- Site Url: [https://aithread.in](https://aithread.in)

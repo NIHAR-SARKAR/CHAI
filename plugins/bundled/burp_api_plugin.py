@@ -2,11 +2,12 @@
 Burp Suite Professional API plugin.
 Requires Burp Pro with API enabled.
 """
+from ast import Import
+import json
 import logging
 import requests
 from plugins.plugin_base import PentestPlugin, PluginMetadata, PluginResult
 from models.session import Finding
-
 logger = logging.getLogger(__name__)
 
 
@@ -27,12 +28,13 @@ class BurpApiPlugin(PentestPlugin):
 
     async def run(self, session_id, target, args, process_controller, safety_policy, session_manager) -> PluginResult:
         import time
-        api_base = args.get("api_base", "http://localhost:1337")
+        api_base = args.get("api_base", "http://localhost:3004")
         api_key = args.get("api_key", "")
         action = args.get("action", "scan")
 
         if action == "scan":
-            command = f"curl -s -X POST {api_base}/v0.1/scan -H 'Content-Type: application/json' -d '{{"urls":["{target}"]}}'"
+            payload = json.dumps({"urls": [target]})
+            command = f"curl -s -X POST {api_base}/v0.1/scan -H 'Content-Type: application/json' -d '{payload}'"
         elif action == "results":
             command = f"curl -s {api_base}/v0.1/scan/issues"
         else:
