@@ -198,6 +198,11 @@ sudo cp data/firejail/pentest.profile /etc/firejail/
 python main.py --transport streamable-http
 ```
 
+<p align="center">
+	
+<img src="./snapshots/chai-network-security-test.png" width="90%" />
+</p>
+
 ## Configuration
 
 ### config.yaml (Main Config)
