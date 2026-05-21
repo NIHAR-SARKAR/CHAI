@@ -1,4 +1,4 @@
-# PICO CLAW MCP Security Server — Secrets File
+# CHAI MCP Security Server — Secrets File
 # NEVER commit this file. Add to .gitignore.
 # File permissions should be 600 (chmod 600 .security.yml)
 
@@ -24,4 +24,4 @@ huggingface:
 # Optional: Burp Suite Pro API (for burp_api plugin)
 burp_api:
   api_key: ""
-  api_base: "http://localhost:1337"
+  api_base: "http://localhost:3004"

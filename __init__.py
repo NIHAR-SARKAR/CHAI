@@ -1,4 +1,4 @@
-"""PICO CLAW MCP Security Server v2.0.0
+"""CHAI MCP Security Server v2.0.0
 
 A production-ready MCP server for autonomous penetration testing with:
 - Multi-provider LLM support (Azure, OpenAI, Anthropic, Bedrock, OpenRouter, HuggingFace)
@@ -10,4 +10,4 @@ A production-ready MCP server for autonomous penetration testing with:
 """
 
 __version__ = "2.0.0"
-__author__ = "PICO CLAW Security Team"
+__author__ = "CHAI Security Team"

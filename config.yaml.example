@@ -1,11 +1,11 @@
-# PICO CLAW MCP Security Server — Main Configuration
+# CHAI MCP Security Server — Main Configuration
 # Secrets (API keys, tokens) go in .security.yml — NEVER here
 
 server:
-  name: "pico-claw-mcp-security"
+  name: "chai-mcp-security"
   version: "2.0.0"
   transport: "stdio"           # stdio | sse
-  sse_port: 8765               # only used if transport=sse
+  sse_port: 9010               # only used if transport=sse
   log_level: "info"            # debug | info | warn | error
 
 paths:
@@ -25,7 +25,7 @@ sandbox:
 
 # ─────────────────────────────────────────────────────────────
 # LLM PROVIDER CONFIGURATION
-# The server has its OWN AI brain — independent of PICO CLAW.
+# The server has its OWN AI brain — independent of CHAI.
 # Enable ONE primary provider. Fallback is optional.
 # All api_key values must be set in .security.yml
 # ─────────────────────────────────────────────────────────────

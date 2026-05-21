@@ -1,8 +1,10 @@
 """Main MCP server using FastMCP.
 Registers all tools and handles stdio/SSE transport.
 """
+import argparse
 import asyncio
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -43,7 +45,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Initialize MCP server
-mcp = FastMCP("pico-claw-mcp-security")
+mcp = FastMCP("chai-mcp-security")
 
 # Global context
 _ctx = AppContext()
@@ -51,7 +53,7 @@ _ctx = AppContext()
 
 async def initialize():
     """Initialize all components."""
-    logger.info("Initializing PICO CLAW MCP Security Server v2.0.0")
+    logger.info("Initializing CHAI MCP Security Server v2.0.0")
 
     # Load configuration
     config = load_config("config.yaml", ".security.yml")
@@ -331,19 +333,42 @@ async def emergency_stop(session_id: str) -> dict:
 
 
 # ─── MAIN ────────────────────────────────────────────────────────────────────
-
 async def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--transport", choices=["stdio", "sse", "streamable-http"], default=None)
+    args, _ = parser.parse_known_args()
+    
     await initialize()
-
-    transport = _ctx.config.server.transport
+    
+    transport = args.transport or os.environ.get("MCP_TRANSPORT") or _ctx.config.server.transport
 
     if transport == "stdio":
         logger.info("Starting MCP server with stdio transport")
         await mcp.run_stdio_async()
-    elif transport == "sse":
+    
+    elif transport == "streamable-http":
         port = _ctx.config.server.sse_port
-        logger.info(f"Starting MCP server with SSE transport on port {port}")
-        await mcp.run_sse_async(host="0.0.0.0", port=port)
+    
+        logger.info(f"Starting MCP Streamable HTTP server on port {port}")
+    
+        import uvicorn
+    
+        app = mcp.streamable_http_app()
+    
+        config = uvicorn.Config(
+            app,
+            host="0.0.0.0",
+            port=port,
+            log_level="info"
+        )
+    
+        server = uvicorn.Server(config)
+        await server.serve()
+
+    elif transport == "sse":
+        raise NotImplementedError(
+        "SSE transport not implemented. Use streamable-http."
+        )
     else:
         raise ValueError(f"Unknown transport: {transport}")
 

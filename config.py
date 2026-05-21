@@ -8,10 +8,10 @@ from typing import Any
 
 @dataclass
 class ServerConfig:
-    name: str = "pico-claw-mcp-security"
+    name: str = "chai-mcp-security"
     version: str = "2.0.0"
     transport: str = "stdio"
-    sse_port: int = 8765
+    sse_port: int = 9010
     log_level: str = "info"
 
 
