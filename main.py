@@ -7,6 +7,7 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
@@ -119,8 +120,8 @@ async def initialize():
 async def initialize_session(
     target: str,
     test_type: str = "web_app",
-    scope: list = None,
-    metadata: dict = None,
+    scope: list[str] | None = None,
+    metadata: dict[str, Any] | None = None,
 ) -> dict:
     """Initialize a new penetration testing session."""
     session_id = await _ctx.session_manager.create_session(
@@ -248,7 +249,7 @@ async def run_autonomous_scan_tool(
     max_phases: int = 4,
     stop_on_critical: bool = True,
     generate_report: bool = True,
-    provider_override: str = None,
+    provider_override: str | None = None,
 ) -> dict:
     """
     Run fully autonomous penetration test.
@@ -268,7 +269,7 @@ async def run_plugin(
     session_id: str,
     plugin_name: str,
     target: str,
-    args: dict = None,
+    args: dict[str, Any] | None = None,
 ) -> dict:
     """Run a loaded plugin."""
     plugin = _ctx.plugin_loader.get(plugin_name)
@@ -296,6 +297,38 @@ async def run_plugin(
 async def list_plugins() -> dict:
     """List all loaded plugins."""
     return {"plugins": _ctx.plugin_loader.list_plugins()}
+
+@mcp.tool()
+async def list_all_tools() -> dict:
+    """List all available tools, plugins, and their metadata."""
+    
+    # Built-in tools from _ctx.tools (each is a BaseTool instance)
+    built_in_tools = []
+    for name, tool_instance in _ctx.tools.items():
+        built_in_tools.append({
+            "name": name,
+            "type": "built_in",
+            "description": getattr(tool_instance, 'description', 'No description'),
+            "class": tool_instance.__class__.__name__,
+        })
+    
+    # Plugins from _ctx.plugin_loader
+    plugins = _ctx.plugin_loader.list_plugins()
+    
+    # Also include the high-level autonomous scan capability
+    capabilities = [
+        {"name": "run_autonomous_scan", "type": "orchestrator", "description": "Full autonomous pentest with AI planner"},
+        {"name": "initialize_session", "type": "session", "description": "Create new pentest session"},
+        {"name": "get_session_status", "type": "session", "description": "Check session status and findings"},
+        {"name": "emergency_stop", "type": "session", "description": "Emergency stop all processes"},
+    ]
+    
+    return {
+        "built_in_tools": built_in_tools,
+        "plugins": plugins,
+        "session_tools": capabilities,
+        "total_count": len(built_in_tools) + len(plugins) + len(capabilities)
+    }
 
 
 @mcp.tool()
