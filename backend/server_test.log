@@ -1,0 +1,88 @@
+2026-06-30 00:09:39 | INFO     | backend.main | Initializing CHAI MCP Security Server v2.0.0
+2026-06-30 00:09:39 | INFO     | root | WebSocket log handler attached
+2026-06-30 00:09:39 | INFO     | root | Logging configured: console + file=C:\Users\NiharAdmin\AppData\Local\Temp\.chai\logs\chai-2026-06-30.log, level=INFO
+2026-06-30 00:09:39 | INFO     | core.session_manager | Session database initialized
+2026-06-30 00:09:39 | INFO     | kb.graph_db | Graph database initialized
+2026-06-30 00:09:39 | INFO     | backend.main | WSL adapter active: distro=kali-linux, user=sality
+2026-06-30 00:09:39 | INFO     | backend.main | [SUDO] Attempting to configure passwordless sudo for WSL user 'sality'
+2026-06-30 00:09:39 | INFO     | core.sudo_handler | [SUDO] Configuring passwordless sudo for WSL user 'sality'
+2026-06-30 00:09:39 | INFO     | core.sudo_handler | [SUDO] Running as root in WSL: C:\Windows\system32\wsl.exe -d kali-linux -u root bash -c "echo 'sality ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/chai-sality && chmod 440 /etc/sudoers.d/chai-sality && visudo -c"...
+2026-06-30 00:09:47 | INFO     | core.sudo_handler | [SUDO] Passwordless sudo configured for 'sality' in WSL
+2026-06-30 00:09:47 | INFO     | backend.main | [SUDO] Passwordless sudo is now configured — future sudo commands will not prompt for a password
+2026-06-30 00:09:54 | INFO     | httpx | HTTP Request: POST https://ai-thread.services.ai.azure.com/models/chat/completions?api-version=2024-05-01-preview "HTTP/1.1 200 OK"
+2026-06-30 00:09:54 | INFO     | backend.main | LLM provider initialized: azure_openai
+2026-06-30 00:09:55 | INFO     | kb.vector_search | sqlite-vec available for vector search
+2026-06-30 00:10:23 | INFO     | sentence_transformers.base.model | No device provided, using cpu
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-06-30 00:10:26 | WARNING  | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:26 | INFO     | sentence_transformers.base.model | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:26 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:27 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 1488.98it/s]
+2026-06-30 00:10:28 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:28 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:29 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-06-30 00:10:30 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-06-30 00:10:31 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-06-30 00:10:31 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-06-30 00:10:31 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+D:\PUBLIC\CHAI\backend\kb\vector_search.py:66: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  self._embedding_dim = self._embedding_model.get_sentence_embedding_dimension()
+2026-06-30 00:10:31 | INFO     | kb.vector_search | Embedding model loaded: all-MiniLM-L6-v2 (dim=384)
+D:\PUBLIC\CHAI\backend\kb\vector_search.py:101: RuntimeWarning: coroutine 'Connection.enable_load_extension' was never awaited
+  db.enable_load_extension(True)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\NiharAdmin\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlite_vec\__init__.py:17: RuntimeWarning: coroutine 'Connection.load_extension' was never awaited
+  conn.load_extension(loadable_path())
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2026-06-30 00:10:31 | WARNING  | kb.vector_search | Could not create vector table: no such module: vec0
+2026-06-30 00:10:33 | INFO     | core.wsl_adapter | [WSL] Wrapped command: C:\Windows\system32\wsl.exe -d kali-linux -u sality bash -c "timeout 10 bash -c 'which feroxbuster'"...
+2026-06-30 00:10:33 | INFO     | core.wsl_adapter | [wsl-check] WSL Executing: C:\Windows\system32\wsl.exe -d kali-linux -u sality bash -c "timeout 10 bash -c 'which feroxbuster'"...
+2026-06-30 00:10:34 | WARNING  | plugins.plugin_loader | Plugin 'feroxbuster' skipped: binary 'feroxbuster' not found
+2026-06-30 00:10:34 | INFO     | core.wsl_adapter | [WSL] Wrapped command: C:\Windows\system32\wsl.exe -d kali-linux -u sality bash -c "timeout 10 bash -c 'which msfconsole'"...
+2026-06-30 00:10:34 | INFO     | core.wsl_adapter | [wsl-check] WSL Executing: C:\Windows\system32\wsl.exe -d kali-linux -u sality bash -c "timeout 10 bash -c 'which msfconsole'"...
+2026-06-30 00:10:35 | WARNING  | plugins.plugin_loader | Plugin 'metasploit' skipped: binary 'msfconsole' not found
+2026-06-30 00:10:35 | INFO     | plugins.plugin_loader | External plugins path not found: C:\Users\NiharAdmin\AppData\Local\Temp\.chai\plugins\external
+2026-06-30 00:10:35 | INFO     | plugins.plugin_loader | Loaded 0 plugin(s): []
+2026-06-30 00:10:35 | INFO     | app_context | Application context initialized
+2026-06-30 00:10:35 | INFO     | backend.main | Server initialization complete
+2026-06-30 00:10:35 | INFO     | backend.main | Web UI available at http://localhost:8060
+2026-06-30 00:10:35 | INFO     | backend.main | Starting MCP server with stdio transport
+2026-06-30 00:10:35 | INFO     | backend.main | Starting CHAI Web UI on port 8060
+INFO:     Started server process [39224]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8060 (Press CTRL+C to quit)
+ERROR:    Traceback (most recent call last):
+  File "C:\Users\NiharAdmin\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 645, in lifespan
+    await receive()
+  File "C:\Users\NiharAdmin\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\NiharAdmin\AppData\Local\Programs\Python\Python313\Lib\asyncio\queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+

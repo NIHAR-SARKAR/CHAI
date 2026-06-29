@@ -2,3 +2,6 @@
 /.security.yml
 /__pycache__
 __pycache__
+/backend/.security.yml
+/backend/config.yaml
+/GAP_ANALYSIS_REPORT.md
