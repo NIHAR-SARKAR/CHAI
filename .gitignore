@@ -5,3 +5,4 @@ __pycache__
 /backend/.security.yml
 /backend/config.yaml
 /GAP_ANALYSIS_REPORT.md
+/ui/.env
