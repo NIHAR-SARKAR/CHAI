@@ -82,73 +82,38 @@ External Client (CHAI / any MCP tool)
 
 ```
 CHAI/
-├── main.py                          # FastMCP server entry point
-├── config.py                        # Configuration loader
-├── config.yaml                      # Main configuration (no secrets)
-├── .security.yml                    # API keys (git-ignored)
-├── requirements.txt                 # Python dependencies
-├── app_context.py                   # Application context singleton
+├── backend/                         # Python MCP server + REST API backend
+│   ├── main.py                      # FastMCP server entry point
+│   ├── run.py                       # Convenience launcher
+│   ├── config.py                    # Configuration loader
+│   ├── config.yaml                  # Main configuration (no secrets)
+│   ├── .security.yml               # API keys (git-ignored)
+│   ├── requirements.txt            # Python dependencies
+│   ├── app_context.py              # Application context singleton
+│   ├── web/                        # FastAPI REST API + WebSocket
+│   │   └── api.py                  # API endpoints for React UI
+│   │
+│   ├── llm/                        # Multi-provider LLM adapter layer
+│   ├── core/                       # Core engine (session, safety, planner)
+│   ├── kb/                         # Knowledge Base
+│   ├── tools/                      # Security testing tools
+│   ├── plugins/                    # Plugin system
+│   ├── models/                     # Data models
+│   ├── utils/                      # Utilities
+│   └── data/                       # Database schemas & profiles
 │
-├── llm/                             # Multi-provider LLM adapter layer
-│   ├── base_provider.py             # Abstract base class
-│   ├── provider_factory.py          # Provider selection with fallback
-│   ├── prompt_templates.py          # All LLM prompts (versioned)
-│   └── providers/
-│       ├── azure_openai.py          # Azure OpenAI
-│       ├── openai_direct.py         # Direct OpenAI
-│       ├── anthropic_claude.py      # Claude
-│       ├── amazon_bedrock.py        # AWS Bedrock
-│       ├── openrouter.py            # OpenRouter
-│       └── huggingface.py           # HuggingFace
+├── ui/                             # React web dashboard (Vite + TypeScript)
+│   ├── src/
+│   │   ├── pages/                  # Dashboard, Sessions, Findings, etc.
+│   │   ├── components/             # Sidebar, Layout, Toaster
+│   │   ├── hooks/                  # WebSocket hook
+│   │   ├── lib/                    # API client
+│   │   └── types/                  # TypeScript types
+│   └── dist/                       # Built static files (served by backend)
 │
-├── core/                            # Core engine
-│   ├── session_manager.py           # SQLite session CRUD + state machine
-│   ├── safety_policy.py             # Command validation, tier system
-│   ├── process_controller.py        # firejail/cgroups/chroot wrapper
-│   ├── audit_logger.py              # Immutable audit logging
-│   ├── ai_planner.py                # LLM decision engine (3 call types)
-│   └── execution_loop.py            # Local chain runner
-│
-├── kb/                              # Knowledge Base
-│   ├── graph_db.py                  # Attack graph with recursive CTE
-│   ├── playbook_loader.py           # Playbook section extraction
-│   └── vector_search.py             # Vector/BM25 search
-│
-├── tools/                           # Security testing tools
-│   ├── base.py                      # Base tool class
-│   ├── recon.py                     # Reconnaissance
-│   ├── scan.py                      # Vulnerability scanning
-│   ├── injection.py                 # Injection testing
-│   ├── auth.py                      # Authentication testing
-│   ├── network.py                   # Network testing
-│   ├── poc.py                       # PoC generation
-│   ├── exec.py                      # Custom command execution
-│   ├── analyze.py                   # Findings analysis
-│   ├── report.py                    # Report generation
-│   └── autonomous.py                # Autonomous scan orchestrator
-│
-├── plugins/                         # Plugin system
-│   ├── plugin_base.py               # Base class
-│   ├── plugin_loader.py             # Auto-discovery loader
-│   └── bundled/
-│       ├── feroxbuster_plugin.py    # Directory bruteforcer
-│       ├── metasploit_plugin.py     # Metasploit Framework
-│       └── burp_api_plugin.py      # Burp Suite Pro API
-│
-├── models/                          # Data models
-│   ├── session.py                   # Session and Finding models
-│   └── schemas.py                   # Pydantic schemas
-│
-├── utils/                           # Utilities
-│   ├── command_parser.py            # Command parsing
-│   ├── output_parser.py             # Tool output parsing
-│   └── cvss_calculator.py           # CVSS v3.1 calculator
-│
-└── data/                            # Database schemas & profiles
-    ├── init_sessions.sql            # Session DB schema + AI decisions table
-    ├── init_graph.sql               # Knowledge graph (50+ nodes)
-    └── firejail/
-        └── pentest.profile          # Firejail sandbox profile
+├── snapshots/                      # Screenshots
+├── README.md
+└── LICENSE
 ```
 
 ## Installation
@@ -165,7 +130,7 @@ CHAI/
 ```bash
 # Clone the repository
 git clone https://github.com/NIHAR-SARKAR/CHAI.git
-cd CHAI
+cd CHAI/backend
 
 # Create virtual environment
 python -m venv .venv
@@ -176,9 +141,9 @@ source .venv/bin/activate -- linux
 pip install -r requirements.txt
 
 # Configure secrets
-cp .security.yml.example .security.yml
-chmod 600 .security.yml
-# Edit .security.yml with your API keys
+cp backend/.security.yml.example backend/.security.yml
+chmod 600 backend/.security.yml
+# Edit backend/.security.yml with your API keys
 
 # Create required directories
 ### linux
@@ -194,12 +159,16 @@ New-Item -ItemType Directory -Force -Path "C:\opt\mcp-security-server\plugins\ex
 icacls "C:\opt" /grant "$env:USERNAME:(OI)(CI)F" /Ts -- Grant current user full permissions
 
 # Install firejail profile
-sudo cp data/firejail/pentest.profile /etc/firejail/
+sudo cp backend/data/firejail/pentest.profile /etc/firejail/
 
 
 
-# run server
+# run server (MCP + Web UI)
+cd backend
 python main.py --transport streamable-http
+
+# or from project root
+python backend/main.py --transport streamable-http
 ```
 
 <p align="center">
@@ -209,9 +178,9 @@ python main.py --transport streamable-http
 
 ## Configuration
 
-### config.yaml (Main Config)
+### `backend/config.yaml` (Main Config)
 
-Edit `config.yaml` to configure:
+Edit `backend/config.yaml` to configure:
 
 - Server transport (stdio or SSE)
 - Sandbox limits (RAM, CPU, timeout)
@@ -236,7 +205,7 @@ plugins:
     burp_api: false # Needs Burp Pro API key
 ```
 
-### .security.yml (Secrets)
+### `backend/.security.yml` (Secrets)
 
 ```yaml
 # NEVER commit this file
@@ -250,6 +219,63 @@ anthropic:
   api_key: "your-anthropic-key"
 
 # ... etc for each provider
+```
+
+## Web UI (React Dashboard)
+
+CHAI now includes a modern React-based web dashboard served by the backend.
+
+### Features
+
+- **Dashboard** — Real-time stats, severity charts, session activity, recent sessions
+- **Sessions** — Create, view, stop sessions; detailed session info with findings
+- **Live Logs** — Real-time WebSocket streaming of scan progress and tool output
+- **Findings** — Filter by severity/session, view evidence and remediation
+- **Manual Tools** — Run any security tool with custom parameters
+- **Reports** — Generate and download Markdown reports
+- **Config** — View server config, LLM provider, loaded plugins, and tools
+
+### Running the Web UI
+
+The backend serves the built React app automatically on port **8060** (configurable in `backend/config.yaml`):
+
+```bash
+# 1. Start the backend (MCP server + Web UI)
+cd backend
+python main.py --transport streamable-http
+
+# Web UI opens at http://localhost:8060
+# MCP SSE endpoint is on http://localhost:9010/sse
+```
+
+### Development (React hot-reload)
+
+```bash
+cd ui
+npm install      # first time only
+npm run dev      # dev server on http://localhost:5240
+```
+
+The Vite dev proxy forwards `/api` and `/ws` to the backend on `:8060`.
+
+### Building for Production
+
+```bash
+cd ui
+npm run build    # outputs to ui/dist/
+```
+
+The backend auto-serves `ui/dist/` as a static SPA.
+
+### Web UI Configuration
+
+In `backend/config.yaml`:
+
+```yaml
+server:
+  web_enabled: true # Enable/disable web UI
+  web_port: 8060 # Port for the React dashboard
+  sse_port: 9010 # Port for MCP SSE transport
 ```
 
 ### CHAI Integration
@@ -317,7 +343,7 @@ run_autonomous_scan(
     max_phases=4,
     stop_on_critical=True,
     generate_report=True,
-    provider_override=None  # Uses config.yaml active_provider
+    provider_override=None  # Uses backend/config.yaml active_provider
 )
 # Internally: plan → [recon → scan → inject] → evaluate → plan → [...] → report
 # Returns after ~15-30 min:
@@ -388,7 +414,7 @@ case "gemini":
     return GeminiProvider(config)
 ```
 
-**Step 3** — Add config block to `config.yaml`:
+**Step 3** — Add config block to `backend/config.yaml`:
 
 ```yaml
 llm:
@@ -398,14 +424,14 @@ llm:
     api_base: "https://generativelanguage.googleapis.com/v1beta/openai"
 ```
 
-**Step 4** — Add key to `.security.yml`:
+**Step 4** — Add key to `backend/.security.yml`:
 
 ```yaml
 gemini:
   api_key: ""
 ```
 
-**Step 5** — Change `active_provider: "gemini"` in `config.yaml`.
+**Step 5** — Change `active_provider: "gemini"` in `backend/config.yaml`.
 
 **That's it. No other files change.**
 
